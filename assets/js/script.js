@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let button of buttons) {
         button.addEventListener("click", function() {
             if (this.getAttribute("data-type") === "submit") {
-                alert("You clicked submit!");
+                checkAnswer();
             } else {
                 let gameType = this.getAttribute("data-type");
                runGame(gameType);
@@ -22,22 +22,36 @@ document.addEventListener("DOMContentLoaded", function() {
  *  and after the users answer has been processed
  */
 function runGame(gameType) {
-
-    // Create two random numbers between 1 and 25
+    
     let num1 = Math.floor(Math.random() * 25) + 1;
     let num2 = Math.floor(Math.random() * 25) + 1;
 
-    if (gameType === "addition"){
+    if (gameType === "addition") {
         displayAdditionQuestion(num1, num2);
     } else {
-        alert (`Unknown game type: ${gameType}`);
+        console.error(`Unknown game type: ${gameType}`);
         throw `Unknown game type: ${gameType}. Aborting!`;
     }
 }
 
-function checkAnswer(){
 
+/**
+ * Check the answer agaist the first element in 
+ * the returned calculateCorrectAnswer array
+ */
+function checkAnswer() {
+    let userAnswer = parseInt(document.getElementById("answer-box").value);
+    let calculatedAnswer = calculateCorrectAnswer();
+    let isCorrect = userAnswer === calculatedAnswer[0];
+
+    if (isCorrect) {
+        alert("Hey! You got it right!");
+    } else {
+        alert(`Oh no, You answered ${userAnswer}. The correct answer was ${calculatedAnswer[0]}!`);
+    }
+    runGame(calculateCorrectAnswer[1]);
 }
+
 /**Gets the operands (the numbers ) and the operator (plus, minus etc) 
  * directly from the dom adn returns the correct answer
  */
